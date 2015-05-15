@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>G2 Demo</title>
+<link href="./bs3/dpl.css" rel="stylesheet">
+<link href="./bs3/bui.css" rel="stylesheet">
+<style>
+  *{
+    box-sizing: border-box;
+
+  }
+  body{
+    font-size: 18px;
+  }
+  .container{
+    margin: 20px 40px;
+    width: auto;
+  }
+  .cmd-list{
+    list-style: decimal;
+    margin-left: 40px;
+  }
+
+  .cmd-list li{
+    line-height: 30px;
+  }
+  textarea{
+    font-size: 20px;
+  }
+  h2,h3{
+    margin: 18px 0;
+  }
+
+  .tip{
+    color: #999;
+    margin-top: 10px;
+    margin-left: 45px;
+  }
+</style>
+
+</head>
+<body>
+ 
+ <div class="container">
+  <a href="./index.html">更多demo</a>
+  <h2>钻石数据</h2>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>carat</th>
+      <th>cut</th>
+      <th>color</th>
+      <th>clarity</th>
+      <th>depth</th>
+      <th>table</th>
+      <th>price</th>
+      <th>x</th>
+      <th>y</th>
+      <th>z</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>1.01</td>
+      <td>Premium</td>
+      <td>I</td>
+      <td>SI2</td>
+      <td>61.5</td>
+      <td>62</td>
+      <td>3360</td>
+      <td>6.41</td>
+      <td>6.37</td>
+      <td>3.93</td>
+    </tr>
+    </tbody>
+  </table>
+  
+  <div id="canvas2"></div>
+  
+  
+  <div class="row-fluid" style="margin-left:50px;">
+    <div class="span20 ">
+      <textarea name="" id="txt" cols="30" rows="10" style="width:100%;"></textarea>
+    </div>
+    
+  </div>
+  <p id="tip" class="tip"></p>
+  <h2>G2命令</h2>
+  <p>可以使用 enter 键执行命令,上下键显示下一条，上一条命令</p>
+  <h3 id="基本点图">基本点图<a href="#基本点图" class="anchor">¶</a></h3>
+  <ul class="cmd-list">
+    <li>chart.point().position('carat*price');</li>
+    <li>chart.facet([]);chart.point().position('carat*price').color('clarity').shape('cut');</li>
+  </ul>
+
+
+  <h3 id="分面">分面<a href="#分面" class="anchor">¶</a></h3>
+  <ul class="cmd-list">
+    <li>chart.facet(['cut','clarity']);
+     chart.point().position('carat*price').color('clarity');</li>
+    <li>chart.facet(['cut']);
+    chart.point().position('carat*price').color('cut')</li>
+    <li>chart.facet([,'clarity']);
+    chart.point().position('carat*price').color('clarity').shape('cut');</li>
+    
+  </ul>
+
+  <h3 id="分布">点图分布<a href="#分布" class="anchor">¶</a></h3>
+  <ul class="cmd-list">
+    <li>chart.facet([]);chart.point().position('clarity').color('clarity');</li>
+    <li>chart.pointStack().position('clarity').color('clarity').size(0.4);</li>
+    <li>chart.pointJitter().position('clarity').color('clarity');</li>
+    <li>chart.pointDodge().position('clarity').color('cut').size(1.2)</li>
+    <li>chart.pointJitter().position('clarity').color('clarity');</li>
+    <li>chart.pointJitter().position('cut*depth').color('cut')</li>
+   
+  </ul>
+
+  <h3 id="柱状图分布">柱状图分布<a href="#柱状图分布" class="anchor">¶</a></h3>
+  <ul class="cmd-list">
+    <li>chart.interval().position(Stat.summary.count('clarity')).color('clarity');</li>
+    <li>chart.interval().position(Stat.summary.count(Stat.bin.rect('depth'))).color('red');</li>
+    <li>chart.intervalStack().position(Stat.summary.count(Stat.bin.rect('depth'))).color('cut');</li>
+    <li>chart.coord('plus');chart.intervalStack().position(Stat.summary.count(Stat.bin.rect('depth'))).color('cut');</li>
+
+  </ul>
+
+  <h3 id="分析">分析<a href="#分析" class="anchor">¶</a></h3>
+  <ul class="cmd-list">
+    <li>chart.coord('rect');chart.interval().position(Stat.summary.mean('cut*price')).color('cut');</li>
+    <li>chart.interval().position(Stat.summary.mean('cut*carat')).color('cut');</li>
+  </ul>
+  <h3 id="其他图">其他图<a href="#其他图" class="anchor">¶</a></h3>
+  <ul class="cmd-list">
+    <li>chart.polygon().position(Stat.bin.rect('carat*price',0.01)).color(Stat.summary.count(),'red');</li>
+    <li>chart.coord('polar');chart.interval().position(Stat.summary.mean('cut*carat')).color('cut');</li>
+    <li>chart.coord('plus');chart.interval().position(Stat.summary.mean('cut*carat')).color('cut');</li>
+    <li>chart.coord('rect');chart.line().position(Stat.summary.mean('cut*price'));</li>
+    <li>chart.area().position(Stat.summary.mean('cut*price'));</li>
+    <li>chart.pointDodge().position('clarity').color('cut').size(1.2)
+    </li>
+  </ul>
+
+  <h3 id="热力图">热力图<a href="#热力图" class="anchor">¶</a></h3>
+  <ul class="cmd-list">
+    <li>chart.polygon().position(Stat.bin.rect('carat*price',0.01)).color(Stat.summary.count(),'red');</li>
+    <li>chart.polygon().position(Stat.bin.rect('cut*carat',0.01)).color(Stat.summary.count(),'red');</li>
+    <li>chart.polygon().position('cut*color').color(Stat.summary.count(),'lightness')</li>
+  </ul>
+
+  <h3 id="饼图">饼图<a href="#饼图" class="anchor">¶</a></h3>
+  <ul class="cmd-list">
+    <li>chart.coord('theta');chart.intervalStack().position(Stat.summary.proportion()).color('cut');</li>
+    <li>chart.coord('theta',{inner: 0.6});chart.intervalStack().position(Stat.summary.proportion()).color('cut');</li>
+    <li>chart.facet(['color','clarity']);
+      chart.intervalStack().position(Stat.summary.proportion()).color('cut');
+    </li>
+  </ul>
+
+  <h3 id="环图">环图<a href="#环图" class="anchor">¶</a></h3>
+  <ul class="cmd-list">
+    <li>chart.facet([]);
+      chart.coord('rho');chart.intervalStack().position(Stat.summary.proportion()).color('cut');</li>
+    <li>chart.coord('rho',{inner: 0.6});chart.intervalStack().position(Stat.summary.proportion()).color('cut');</li>
+    <li>chart.facet(['color','clarity']);
+      chart.intervalStack().position(Stat.summary.proportion()).color('cut');
+    </li>
+  </ul>
+
+  <h3 id="其他">其他<a href="#其他" class="anchor">¶</a></h3>
+  <ul class="cmd-list">
+    <li>chart.facet([]);
+      chart.line().position(Stat.summary.mean('cut*price')).color('color');</li>
+    <li>chart.line().position(Stat.summary.mean('cut*price')).shape('smooth')</li>
+    <li>chart.line().position(Stat.summary.mean('cut*price')).shape('dot')</li>
+    <li>chart.line().position(Stat.summary.mean('cut*price')).shape('dotSmooth')</li>
+    <li>chart.line().position(Stat.summary.mean('cut*price')).shape('color');</li>
+    <li>chart.area().position(Stat.summary.mean('cut*price')).color('color')</li>
+    <li>chart.area().position(Stat.summary.mean('cut*price')).shape('smooth')</li>
+    <li>chart.area().position(Stat.summary.mean('cut*price')).shape('line')</li>
+    <li>chart.area().position(Stat.summary.mean('cut*price')).shape('dotLine')</li>
+    <li>chart.area().position(Stat.summary.mean('cut*price')).shape('dotSmoothLine')</li>
+    <li>chart.area().position(Stat.summary.mean('cut*price')).shape('color');</li>
+    <li>chart.interval().position(Stat.summary.mean('cut*price')).color('cut')</li>
+    <li>chart.intervalStack().position(Stat.summary.mean('cut*price')).color('color')</li>
+    <li>chart.intervalDodge().position(Stat.summary.mean('cut*price')).color('color')</li>
+    <li>chart.interval().position(Stat.summary.mean('cut*price')).color('cut').shape('hollowRect');</li>
+    <li>chart.interval().position(Stat.summary.mean('cut*price')).color('cut').shape('line');</li>
+    <li>chart.interval().position(Stat.summary.mean('cut*price')).color('cut').shape('tick');</li>
+    <li>chart.interval().position(Stat.summary.range('cut*price')).color('cut')</li>
+  </ul>
+  <a href="./index.html">更多demo</a>
+ </div>
+<script src="./js/jquery.min.js?nowrap"></script>
+<script src="./js/index.js?nowrap"></script>
+<script>
+  
+
+    var A = G2.Attr;
+    G2.Global.colors = [ '#00a3d7','#6ebb46','#f6c100','#ff6a00','#e32400','#423ba8','#dedede','#999999'];
+    var lis = $('.cmd-list li');
+    var curIndex = -1; 
+    function getCmd(index){
+      if (index < 0 ){
+        index = 0;
+      }
+      index = index % lis.length;
+      var item = lis[index];
+      return $(item).text();
+    }
+    $.getJSON('./diamond.json?nowrap',function(data){
+
+      var Scale = G2.Scale;
+      var Stat = G2.Stat;
+      var width = $('.container').width();
+      var height = width * 0.6;
+      if (height > 600){
+        height = 600;
+      }
+      var select = document.getElementById('sel');
+
+      var chart = new G2.Chart({
+        id : 'canvas2',
+        width : width,
+
+        height : height,
+        plotCfg : {
+          margin : [10,100,30,50]
+        }
+      });
+      chart.col('clarity',{
+        type: 'cat',
+        values:['IF','VVS1','VVS2','VS1','VS2','SI1','SI2','I1']
+      });
+
+      chart.col('cut',{
+        type: 'cat',
+        values:['Ideal','Premium','Very-Good','Good','Fair']
+      });
+
+      chart.col('color',{
+        type: 'cat',
+        values:['D','E','F','G','H','I','J']
+      });
+      chart.source(data);
+
+      down();
+      /*chart.point().
+            position('carat*price')
+            .color('clarity');
+      chart.render();
+      */
+     /* $('#coord').on('change',function(){
+        var coord = $(this).val();
+        chart.coord(coord);
+        $('#btn').trigger('click');
+      });*/
+      //toCmd(curIndex);
+      function exec(cmd){
+        return eval(cmd);
+      }
+
+      function toCmd(index){
+        var cmd = getCmd(index);
+        $('#txt').val(cmd);
+        repaint();
+      }
+      function repaint(){
+        chart.clear();
+        var cmd = $('#txt').val();
+        exec(cmd);
+        chart.render();
+      }
+
+      $('#txt').on('keydown',function(ev){
+        console.log(ev);
+        if(ev.ctrlKey && ev.keyCode === 48){
+          curIndex = 0;
+          repaint();
+          //down();
+          //toCmd(curIndex);
+        }
+
+        if(ev.keyCode === 40){
+          down();
+        }
+
+        if(ev.keyCode === 38){
+          up();
+        }
+
+        if(ev.keyCode === 13){
+          repaint();
+          ev.preventDefault();
+        }
+      });
+      function up(){
+        curIndex = curIndex - 1;
+        if (curIndex < 0){
+          curIndex = 0;
+        }
+        var cmd = getCmd(curIndex);
+        $('#tip').text(cmd);
+      }
+
+      function down(){
+        curIndex = curIndex + 1;
+        var cmd = getCmd(curIndex);
+        $('#tip').text(cmd);
+      }
+    });
+    
+</script>
+</body>
+</html>
